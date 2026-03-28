@@ -1,0 +1,35 @@
+package com.github.cainamott.nery_farma.impl.enums;
+
+import com.github.cainamott.nery_farma.impl.exceptions.NonCompatibleObject;
+import org.springframework.stereotype.Component;
+
+@Component
+public enum UserProfile {
+
+    GERENTE,
+    AUXILIAR,
+    PROFISSIONAL_SAUDE;
+
+
+    public static UserProfile fromApi(String value){
+        if(value.isBlank() || value == null) {
+            return null;
+        }
+        else {
+            return switch (value){
+                case ("gerente") -> GERENTE;
+                case ("auxiliar") -> AUXILIAR;
+                case ("profissional_saúde") -> PROFISSIONAL_SAUDE;
+                default -> throw new NonCompatibleObject("Perfil inválido");
+            };
+        }
+    }
+
+    public String toApi(){
+        return switch (this){
+                case GERENTE -> "gerente";
+                case AUXILIAR -> "auxiliar";
+                case PROFISSIONAL_SAUDE -> "profissional_saude";
+        };
+    }
+}

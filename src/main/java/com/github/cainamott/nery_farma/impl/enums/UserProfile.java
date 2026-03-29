@@ -3,7 +3,6 @@ package com.github.cainamott.nery_farma.impl.enums;
 import com.github.cainamott.nery_farma.impl.exceptions.NonCompatibleObject;
 import org.springframework.stereotype.Component;
 
-@Component
 public enum UserProfile {
 
     GERENTE,
@@ -12,7 +11,7 @@ public enum UserProfile {
 
 
     public static UserProfile fromApi(String value){
-        if(value.isBlank() || value == null) {
+        if(value == null || value.isBlank()) {
             return null;
         }
         else {

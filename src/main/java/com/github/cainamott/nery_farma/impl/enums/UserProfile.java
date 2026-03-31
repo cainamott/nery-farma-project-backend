@@ -1,9 +1,11 @@
 package com.github.cainamott.nery_farma.impl.enums;
 
 import com.github.cainamott.nery_farma.impl.exceptions.NonCompatibleObject;
+import org.jspecify.annotations.Nullable;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
-public enum UserProfile {
+public enum UserProfile implements GrantedAuthority {
 
     GERENTE,
     AUXILIAR,
@@ -30,5 +32,10 @@ public enum UserProfile {
                 case AUXILIAR -> "auxiliar";
                 case PROFISSIONAL_SAUDE -> "profissional_saude";
         };
+    }
+
+    @Override
+    public @Nullable String getAuthority() {
+        return "ROLE_" + this.name();
     }
 }

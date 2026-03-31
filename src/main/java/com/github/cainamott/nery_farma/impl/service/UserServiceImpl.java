@@ -3,6 +3,9 @@ package com.github.cainamott.nery_farma.impl.service;
 import com.github.cainamott.nery_farma.impl.dto.CreateUserDTO;
 import com.github.cainamott.nery_farma.impl.models.User;
 import com.github.cainamott.nery_farma.impl.repository.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +14,7 @@ import java.util.UUID;
 import static com.github.cainamott.nery_farma.impl.enums.UserProfile.fromApi;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     public UserRepository userRepository;
 
@@ -39,7 +42,7 @@ public class UserServiceImpl implements UserService {
                     createUserDTO.email(),
                     createUserDTO.hashPassword(),
                     createUserDTO.registryNumber(),
-                    fromApi(createUserDTO.profile()) ,
+                    fromApi(createUserDTO.profile()),
                     true
             );
             userRepository.save(user);
@@ -49,5 +52,10 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(UUID id) {
         User user = findUserById(id);
         userRepository.delete(user);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return null;
     }
 }

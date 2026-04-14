@@ -46,7 +46,7 @@ public class SecurityConfig {
                         ))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(
-                                "api/auth/login",
+                                "neryfarma/auth/login",
                                 "api/auth/register"
                         )
                                 .permitAll()

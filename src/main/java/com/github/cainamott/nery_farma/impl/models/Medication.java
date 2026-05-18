@@ -22,7 +22,7 @@ public class Medication {
     private UUID id;
 
     @Column(name = "nome_medicamento")
-    private String medName;
+    private String medicationName;
 
     @Column(name = "categoria")
     @ManyToOne(optional = false)

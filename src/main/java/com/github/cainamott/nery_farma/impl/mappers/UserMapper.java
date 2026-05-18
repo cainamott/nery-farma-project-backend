@@ -15,7 +15,7 @@ public class UserMapper {
         if (user == null) {
             return null;
         }
-        UserDTO dto = new UserDTO(
+        return new UserDTO(
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
@@ -24,14 +24,13 @@ public class UserMapper {
                 user.getProfile().toApi(),
                 user.getActive()
         );
-        return dto;
     }
 
      public User mapToEntity(UserDTO userDTO) {
          if (userDTO == null) {
              return null;
          }
-         User user = new User(
+         return new User(
                  userDTO.id(),
                  userDTO.name(),
                  userDTO.email(),
@@ -40,7 +39,6 @@ public class UserMapper {
                  fromApi(userDTO.profile()),
                  userDTO.active()
          );
-         return user;
      }
 
 }

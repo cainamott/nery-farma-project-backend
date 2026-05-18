@@ -23,7 +23,7 @@ import java.util.Date;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/neryfarma/auth")
+@RequestMapping("/neryfarma/api/auth")
 public class AuthController {
 
     public final AuthenticationManager authenticationManager;

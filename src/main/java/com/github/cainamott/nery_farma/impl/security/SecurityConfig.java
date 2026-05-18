@@ -46,8 +46,8 @@ public class SecurityConfig {
                         ))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(
-                                "neryfarma/auth/login",
-                                "api/auth/register"
+                                "/neryfarma/api/auth/login",
+                                "/neryfarma/api/auth/register"
                         )
                                 .permitAll()
                                 .anyRequest()
@@ -62,7 +62,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configurationSource = new CorsConfiguration();
-        configurationSource.setAllowedOrigins(List.of("http//localhost:5137"));
+        configurationSource.setAllowedOrigins(List.of("http://localhost:5173"));
         configurationSource.setAllowedMethods(List.of("POST", "GET", "DELETE", "PUT", "PATCH"));
         configurationSource.setAllowedHeaders(List.of("*"));
         configurationSource.setAllowCredentials(true);

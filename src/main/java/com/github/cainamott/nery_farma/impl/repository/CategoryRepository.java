@@ -10,8 +10,4 @@ public interface CategoryRepository extends JpaRepository<Category, UUID> {
 
     Category findByLabelIgnoreCase(String label);
 
-    @Query("select c.id from categorias c where max(c.id)")
-    Integer findCategoryMaxId();
-
-
 }

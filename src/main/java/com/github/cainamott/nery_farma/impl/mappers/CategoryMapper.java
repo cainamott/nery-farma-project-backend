@@ -7,6 +7,8 @@ import com.github.cainamott.nery_farma.impl.models.User;
 import com.github.cainamott.nery_farma.impl.repository.CategoryRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 import static com.github.cainamott.nery_farma.impl.enums.UserProfile.fromApi;
 
 @Component
@@ -40,11 +42,6 @@ public class CategoryMapper {
                 category.getDescription(),
                 category.getCreationDate()
         );
-    }
-
-    public Integer generateMaxId() {
-
-        return repository.findCategoryMaxId() + 1;
     }
 
 }

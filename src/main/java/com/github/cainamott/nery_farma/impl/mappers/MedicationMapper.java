@@ -36,7 +36,7 @@ public class MedicationMapper {
         return new MedicationDTO(
                 medication.getId(),
                 medication.getMedicationName(),
-                medication.getCategoryId(),
+                medication.getCategory(),
                 medication.getActivePrinciple(),
                 medication.getDosageForm(),
                 medication.getUnitary(),

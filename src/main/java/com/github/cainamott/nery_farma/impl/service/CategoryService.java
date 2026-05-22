@@ -8,10 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class CategoryService {
@@ -23,10 +21,10 @@ public class CategoryService {
     private static CategoryMapper mapper;
 
     public void createCategory(CategoryDTO categoryDTO){
-        if(!(repository.findByLabel(categoryDTO.label()) == null)){
+        if(repository.findByLabelIgnoreCase(categoryDTO.label()) == null){
 
             Category newCategory = mapper.mapToEntity(categoryDTO);
-            newCategory.setId(UUID.randomUUID());
+            newCategory.setId(mapper.generateMaxId());
             newCategory.setCreationDate(Date.from(Instant.now()));
             repository.save(newCategory);
 
@@ -39,7 +37,7 @@ public class CategoryService {
 
     public CategoryDTO findCategoryByLabel(String label){
 
-        Category categoryFound = repository.findByLabel(label);
+        Category categoryFound = repository.findByLabelIgnoreCase(label);
 
         if(!(categoryFound == null)){
 

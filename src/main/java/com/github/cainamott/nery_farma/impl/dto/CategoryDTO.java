@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.UUID;
 
 public record CategoryDTO(
-        UUID id,
+        Integer id,
         String label,
         String description,
         Date creationDate

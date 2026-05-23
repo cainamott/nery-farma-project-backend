@@ -5,20 +5,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table
+@Table(name = "categorias", schema = "nf_owner")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(name = "nome_categoria")
     private String label;
@@ -26,7 +25,7 @@ public class Category {
     @Column(name = "descricao")
     private String description;
 
-    @Column(name = "data_criacao")
+    @Column(name = "data_criacao", columnDefinition = "DATE")
     private Date creationDate;
 
 }

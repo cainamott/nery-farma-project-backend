@@ -24,8 +24,10 @@ services:
       - backend_network
     ports:
       - "8080:8080"
+    env_file:
+      - .env
     environment:
-      SPING_PROFILES_ACTIVE: dev
+      SPRING_PROFILES_ACTIVE: dev
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_db:5432/nf_db
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: p123

@@ -4,30 +4,28 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.annotation.Id;
 
 import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table
+@Table(name = "medicamentos", schema = "nf_owner")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Medication {
 
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(name = "nome_medicamento")
     private String medicationName;
 
-    @Column(name = "categoria")
     @ManyToOne(optional = false)
-    @JoinColumn
-    private Category categoryId;
+    @JoinColumn(name = "categoria_id") // This forces Hibernate to look for 'categoria_id' instead of 'category_id_id'
+    private Category category;
 
     @Column(name = "princpio_ativo")
     private String activePrinciple; // Adicionar Enum para os diferentes principios ativos
@@ -41,7 +39,7 @@ public class Medication {
     @Column(name = "estoque_minimo")
     private Integer minimalStorage;
 
-    @Column(name = "data_insercao")
+    @Column(name = "data_insercao", columnDefinition = "DATE")
     private Date insertionDate;
 
     @Column(name = "ativo")

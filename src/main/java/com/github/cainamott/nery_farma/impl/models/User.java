@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", schema = "nf_owner")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,7 +25,7 @@ public class User implements UserDetails{
     @GeneratedValue(strategy = GenerationType.UUID)
     UUID id;
 
-    @Column(name = "nome", nullable = false)
+    @Column(name = "name", nullable = false)
     String name;
 
     @Column(name = "senha_hash", nullable = false)
@@ -79,4 +79,3 @@ public class User implements UserDetails{
         return this.active;
     }
 }
-

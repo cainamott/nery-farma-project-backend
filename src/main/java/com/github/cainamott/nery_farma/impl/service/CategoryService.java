@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CategoryService {
@@ -24,7 +25,7 @@ public class CategoryService {
         if(repository.findByLabelIgnoreCase(categoryDTO.label()) == null){
 
             Category newCategory = mapper.mapToEntity(categoryDTO);
-            newCategory.setId(mapper.generateMaxId());
+            newCategory.setId(UUID.randomUUID());
             newCategory.setCreationDate(Date.from(Instant.now()));
             repository.save(newCategory);
 

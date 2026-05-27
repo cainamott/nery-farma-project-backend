@@ -85,4 +85,18 @@ public class MedicationService {
             return mapper.mapToDto(repository.save(updatedMedication));
         }).orElseThrow(() -> new IllegalArgumentException("Medicamento não encontrado"));
     }
+
+    public Boolean validateMedication(UUID medicationId) {
+
+        if (findById(medicationId).isPresent()){
+            return findById(medicationId).get().getIsActive();
+        }
+        else throw new RuntimeException("Medicamento não encontrado para essa Id");
+    }
+
+    public Optional<Medication> findById(UUID id) {
+
+        return repository.findById(id);
+
+    }
 }

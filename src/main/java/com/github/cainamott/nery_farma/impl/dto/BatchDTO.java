@@ -1,8 +1,11 @@
 package com.github.cainamott.nery_farma.impl.dto;
 
+import lombok.Builder;
+
 import java.util.Date;
 import java.util.UUID;
 
+@Builder
 public record BatchDTO(
          UUID id,
          Integer batchNumber,
@@ -14,4 +17,6 @@ public record BatchDTO(
          String dosageForm,
          String unitary
 ) {
+
+
 }

@@ -4,9 +4,9 @@ import com.github.cainamott.nery_farma.impl.exceptions.NonCompatibleObject;
 
 public enum MovementType {
 
-    SAIDA,
-    ENTRADA,
-    AJUSTE;
+    DISPATCH,
+    ENTRY,
+    ADJUSTMENT;
 
     public static MovementType fromApi(String value){
         if(value == null || value.isBlank()) {
@@ -14,9 +14,9 @@ public enum MovementType {
         }
         else {
             return switch (value){
-                case ("saida") -> SAIDA;
-                case ("entrada") -> ENTRADA;
-                case ("ajuste") -> AJUSTE;
+                case ("dispatch") -> DISPATCH;
+                case ("entry") -> ENTRY;
+                case ("adjustment") -> ADJUSTMENT;
                 default -> throw new NonCompatibleObject("Perfil inválido");
             };
         }
@@ -24,9 +24,9 @@ public enum MovementType {
 
     public String toApi(){
         return switch (this){
-            case SAIDA -> "saida";
-            case ENTRADA -> "entrada";
-            case AJUSTE -> "ajuste";
+            case DISPATCH -> "dispatch";
+            case ENTRY -> "entry";
+            case ADJUSTMENT -> "adjustment";
         };
     }
 

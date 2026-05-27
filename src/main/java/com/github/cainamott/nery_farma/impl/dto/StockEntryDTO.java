@@ -3,7 +3,7 @@ package com.github.cainamott.nery_farma.impl.dto;
 import java.util.Date;
 import java.util.UUID;
 
-public record StockReceptionDTO(
+public record StockEntryDTO(
         UUID medicationId,
         Integer batchNumber,
         Date fabricationDate,

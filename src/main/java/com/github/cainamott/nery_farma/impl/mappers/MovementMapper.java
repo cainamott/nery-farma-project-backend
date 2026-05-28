@@ -14,7 +14,7 @@ import java.util.Date;
 @Component
 public class MovementMapper {
 
-    public Movement mapEntryToEntity(StockEntryDTO stockEntryDTO, Batch batch, User user) {
+    public Movement mapEntryToEntity(StockEntryDTO stockEntryDTO, Batch batch) {
 
         if (stockEntryDTO == null) {
             return null;
@@ -26,12 +26,12 @@ public class MovementMapper {
                 MovementType.ENTRY,
                 stockEntryDTO.quantity(),
                 stockEntryDTO.reason(),
-                user,
+                null,
                 new Date()                  // criado_em preenchido no momento do registro
         );
     }
 
-    public Movement mapDispatchToEntity(StockDispatchDTO stockDispatchDTO, Batch batch, User user) {
+    public Movement mapDispatchToEntity(StockDispatchDTO stockDispatchDTO, Batch batch) {
 
         if (stockDispatchDTO == null) {
             return null;
@@ -43,7 +43,7 @@ public class MovementMapper {
                 MovementType.DISPATCH,
                 stockDispatchDTO.quantity(),
                 stockDispatchDTO.reason(),
-                user,
+                null,
                 new Date()
         );
     }
@@ -77,5 +77,8 @@ public class MovementMapper {
                 user != null ? user.getId()   : null,
                 user != null ? user.getName() : null
         );
+
+
+
     }
 }

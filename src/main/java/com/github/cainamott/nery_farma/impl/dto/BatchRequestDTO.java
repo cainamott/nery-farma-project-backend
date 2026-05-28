@@ -7,7 +7,6 @@ import java.util.UUID;
 
 @Builder
 public record BatchRequestDTO(
-
         UUID medicationId,
         Integer batchNumber,
         Date fabricationDate,

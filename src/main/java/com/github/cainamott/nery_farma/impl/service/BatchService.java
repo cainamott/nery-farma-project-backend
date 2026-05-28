@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,7 +25,7 @@ public class BatchService {
 
     private static BatchMapper mapper;
 
-    public BatchDTO getLotesOrdenadosPorValidade(UUID medicationId) {
+    public BatchDTO getBatchByExpirationDate(UUID medicationId) {
 
         BatchDTO dto = mapper.mapToDto(repository.
                 findByMedicationIdOrderByExpirationDateAsc(medicationId));
@@ -42,16 +41,18 @@ public class BatchService {
 
         Medication medication = medicationService.findById(batchDTO.medicationId()).orElseThrow();
 
-        return repository.save(Batch.builder()
-                .id(UUID.randomUUID())
-                .medication(medication)
-                .batchNumber(batchDTO.batchNumber())
-                .fabricationDate(batchDTO.fabricationDate())
-                .expirationDate(batchDTO.expirationDate())
-                .currentQuantity(batchDTO.currentQuantity()).build());
+        return repository.save(
+
+                Batch.builder()
+                        .id(UUID.randomUUID())
+                        .medication(medication)
+                        .batchNumber(generateNewBatchNumber(medication.getId()))
+                        .fabricationDate(batchDTO.fabricationDate())
+                        .expirationDate(batchDTO.expirationDate())
+                        .currentQuantity(batchDTO.currentQuantity()).build()
+        );
 
     }
-
 
     public Optional<Batch> findByBatchNumber(Integer batchNumber) {
 
@@ -65,4 +66,52 @@ public class BatchService {
         }
         else return Boolean.TRUE;
     }
+
+    private Integer generateNewBatchNumber(UUID id) {
+
+        var latestBatch = getBatchByExpirationDate(id);
+        return latestBatch.batchNumber() + 1;
+    }
+
+    public Integer addQuantityToBatch(UUID medicationId, Integer quantity) {
+
+        BatchDTO lote = getBatchByExpirationDate(medicationId);
+
+        repository.save(Batch
+                .builder()
+                .id(lote.id())
+                .medication(medicationService.findById(medicationId).orElseThrow())
+                .batchNumber(lote.batchNumber())
+                .fabricationDate(lote.fabricationDate())
+                .expirationDate(lote.expirationDate())
+                .currentQuantity(lote.currentQuantity() + quantity)
+                .build());
+
+        return quantity;
+    }
+
+    public void removeQuantityFromBatch(UUID medicationId, Integer quantity) {
+
+        BatchDTO batch = getBatchByExpirationDate(medicationId);
+
+        validateBatchMovement(batch, quantity);
+
+        repository.save(Batch
+                .builder()
+                .id(batch.id())
+                .medication(medicationService.findById(medicationId).orElseThrow())
+                .batchNumber(batch.batchNumber())
+                .fabricationDate(batch.fabricationDate())
+                .expirationDate(batch.expirationDate())
+                .currentQuantity(batch.currentQuantity() - quantity)
+                .build());
+    }
+
+    public void validateBatchMovement(BatchDTO batch, Integer quantity) {
+
+        if (batch.currentQuantity() < quantity) throw new
+                RuntimeException("Não é possivel fazer o movimento de estoque");
+
+    }
+
 }

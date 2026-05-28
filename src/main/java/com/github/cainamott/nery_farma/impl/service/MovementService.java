@@ -5,45 +5,35 @@ import com.github.cainamott.nery_farma.impl.dto.BatchRequestDTO;
 import com.github.cainamott.nery_farma.impl.dto.StockEntryDTO;
 import com.github.cainamott.nery_farma.impl.mappers.BatchMapper;
 import com.github.cainamott.nery_farma.impl.mappers.MovementMapper;
-import com.github.cainamott.nery_farma.impl.repository.BatchRepository;
+import com.github.cainamott.nery_farma.impl.models.Batch;
 import com.github.cainamott.nery_farma.impl.repository.MovementRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.UUID;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class MovementService {
 
     public final MovementRepository movementRepository;
-
     public final MedicationService medicationService;
-
     public final BatchService batchService;
-
     public static BatchMapper batchMapper;
-
     public static MovementMapper movementMapper;
 
-
-    // metodo para logica de retirada/acrescimo de estoque
-
     //entrada de estoque
-    public BatchDTO stockEntry(StockEntryDTO dto) {
+    public BatchDTO stockEntry(StockEntryDTO entryDTO) {
 
-        medicationService.validateMedication(dto.medicationId());
-        entryValidation(dto);
-
-            // acrescer a esse lote a quantidade de entrada
-
-        stockOperationMethod(dto);
-
-        // buildar o movement dto
-        // mapear para entidade
-        // salvar no banco
-        // retornar o lote completo
+        medicationService.validateMedication(entryDTO.medicationId());
+        var dto = entryValidation(entryDTO);
+        if(dto != null) {
+            entryDTO = batchMapper.mapDtoToStockEntryDto(dto);
+        }
+        stockEntryMethod(entryDTO);
+        Batch updatedBatch = batchService.findByBatchNumber(entryDTO.batchNumber()).orElseThrow();
+        movementRepository.save(movementMapper.mapEntryToEntity(entryDTO, updatedBatch));
+        return batchMapper.mapToDto(updatedBatch);
 
     }
 
@@ -64,7 +54,14 @@ public class MovementService {
     }
 
 
-    private void stockOperationMethod(StockEntryDTO dto) {
+    private void stockEntryMethod(StockEntryDTO dto) {
+
+        batchService.validateBatch(dto.batchNumber(), dto.expirationDate(), dto.quantity());
+        batchService.addQuantityToBatch(dto.medicationId(), dto.quantity());
+
+    }
+
+    private void stockRemovalMethod(StockEntryDTO dto) {
 
     }
 

@@ -1,6 +1,7 @@
 package com.github.cainamott.nery_farma.impl.controller;
 
 import com.github.cainamott.nery_farma.impl.dto.MovementDTO;
+import com.github.cainamott.nery_farma.impl.dto.StockDispatchDTO;
 import com.github.cainamott.nery_farma.impl.dto.StockEntryDTO;
 import com.github.cainamott.nery_farma.impl.service.MovementService;
 import lombok.AllArgsConstructor;
@@ -21,5 +22,12 @@ public class MovementController {
     public ResponseEntity medicationEntryMovement(StockEntryDTO entryDTO) {
         movementService.stockEntry(entryDTO);
         return ResponseEntity.accepted().build();
+    }
+
+
+    @PostMapping("/dispatch")
+    public ResponseEntity medicationDispatchMovement(StockDispatchDTO dispatchDTO) {
+        movementService.stockDispatch(dispatchDTO);
+
     }
 }

@@ -2,6 +2,7 @@ package com.github.cainamott.nery_farma.impl.service;
 
 import com.github.cainamott.nery_farma.impl.dto.BatchDTO;
 import com.github.cainamott.nery_farma.impl.dto.BatchRequestDTO;
+import com.github.cainamott.nery_farma.impl.dto.StockDispatchDTO;
 import com.github.cainamott.nery_farma.impl.dto.StockEntryDTO;
 import com.github.cainamott.nery_farma.impl.mappers.BatchMapper;
 import com.github.cainamott.nery_farma.impl.mappers.MovementMapper;
@@ -58,6 +59,10 @@ public class MovementService {
 
         batchService.validateBatch(dto.batchNumber(), dto.expirationDate(), dto.quantity());
         batchService.addQuantityToBatch(dto.medicationId(), dto.quantity());
+
+    }
+
+    public BatchDTO stockDispatch(StockDispatchDTO dispatchDTO){
 
     }
 

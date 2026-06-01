@@ -5,10 +5,13 @@ import com.github.cainamott.nery_farma.impl.dto.CreateMedicationDTO;
 import com.github.cainamott.nery_farma.impl.mappers.MedicationMapper;
 import com.github.cainamott.nery_farma.impl.models.Medication;
 import com.github.cainamott.nery_farma.impl.repository.MedicationRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.Optional;
 
@@ -22,6 +25,12 @@ public class MedicationService {
         this.repository = repository;
         this.mapper = mapper;
     }
+
+    public Page<MedicationDTO> findAllMedications(Pageable pageable) {
+
+        return repository.findAll(pageable).map(mapper::mapToDto);
+    }
+
 
     public void createMedication(CreateMedicationDTO medicationDto) {
 

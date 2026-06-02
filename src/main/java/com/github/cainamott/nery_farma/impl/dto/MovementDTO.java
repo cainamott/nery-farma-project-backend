@@ -16,8 +16,7 @@ public record MovementDTO(
          Integer batchNumber,
          Date expirationDate,
          UUID medicationId,
-         String medicationName,
-         UUID userId,
-         String userName
+         String medicationName
+
 ) {
 }

@@ -64,9 +64,23 @@ public class MovementService {
 
     public BatchDTO stockDispatch(StockDispatchDTO dispatchDTO){
 
+        // validar o lote/medicamento
+        medicationService.validateMedication(dispatchDTO.medicationId());
+        batchService.findByBatchNumber(dispatchDTO.batchNumber()).get();
+        batchService.validateBatch(
+                dispatchDTO.batchNumber(),
+                batchFound.getExpirationDate(),
+                batchFound.getCurrentQuantity());
+
+        // mapear para saida
+        // gerar movimento de saida e decrementar estoque
     }
 
     private void stockRemovalMethod(StockEntryDTO dto) {
+
+        batchService.removeQuantityFromBatch(
+                dto.medicationId(),
+                dto.quantity());
 
     }
 

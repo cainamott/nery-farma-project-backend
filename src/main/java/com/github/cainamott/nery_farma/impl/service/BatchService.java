@@ -59,9 +59,16 @@ public class BatchService {
         return repository.findByBatchNumber(batchNumber);
     }
 
+    public Optional<Batch> findById(UUID batchId) {
+
+        return repository.findById(batchId);
+    }
+
     public Boolean validateBatch(Integer batchNumber, Date expirationDate, Integer quantity) {
 
-        if (quantity < 0 || findByBatchNumber(batchNumber).isEmpty() || expirationDate.before(Date.from(Instant.now()))){
+        var batchFound = findByBatchNumber(batchNumber).get();
+
+        if (batchFound.getCurrentQuantity() < 0 || findByBatchNumber(batchNumber).isEmpty() || expirationDate.before(Date.from(Instant.now()))){
             return Boolean.FALSE;
         }
         else return Boolean.TRUE;

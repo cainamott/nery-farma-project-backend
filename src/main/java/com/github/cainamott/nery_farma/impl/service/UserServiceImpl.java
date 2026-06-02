@@ -14,7 +14,7 @@ import java.util.UUID;
 import static com.github.cainamott.nery_farma.impl.enums.UserProfile.fromApi;
 
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements  UserDetailsService {
 
     public UserRepository userRepository;
 

@@ -35,10 +35,10 @@ public class Movement {
     @Column(name = "motivo")
     private String reason;
 
-    // N:1 com Usuários
+    /*// N:1 com Usuários
     @ManyToOne(optional = false)
     @JoinColumn(name = "usuario_id", nullable = false)
-    private User user;
+    private User user;*/
 
     @Column(name = "criado_em", columnDefinition = "TIMESTAMP", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)

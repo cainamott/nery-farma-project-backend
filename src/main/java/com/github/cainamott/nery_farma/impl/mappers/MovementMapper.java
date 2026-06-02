@@ -25,7 +25,6 @@ public class MovementMapper {
                 batch,
                 MovementType.ENTRY,
                 stockEntryDTO.quantity(),
-                stockEntryDTO.reason(),
                 null,
                 new Date()                  // criado_em preenchido no momento do registro
         );
@@ -42,7 +41,6 @@ public class MovementMapper {
                 batch,
                 MovementType.DISPATCH,
                 stockDispatchDTO.quantity(),
-                stockDispatchDTO.reason(),
                 null,
                 new Date()
         );
@@ -55,7 +53,7 @@ public class MovementMapper {
         }
 
         Batch batch       = movement.getBatch();
-        User  user        = movement.getUser();
+        //User  user        = movement.getUser();
 
         return new MovementDTO(
                 movement.getId(),
@@ -71,11 +69,11 @@ public class MovementMapper {
 
                 // dados resumidos do medicamento via lote
                 batch != null && batch.getMedication() != null ? batch.getMedication().getId()             : null,
-                batch != null && batch.getMedication() != null ? batch.getMedication().getMedicationName() : null,
+                batch != null && batch.getMedication() != null ? batch.getMedication().getMedicationName() : null
 
                 // dados resumidos do usuário
-                user != null ? user.getId()   : null,
-                user != null ? user.getName() : null
+               /* user != null ? user.getId()   : null,
+                user != null ? user.getName() : null*/
         );
 
 

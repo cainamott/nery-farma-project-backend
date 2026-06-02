@@ -97,10 +97,15 @@ public class MedicationService {
 
     public Boolean validateMedication(UUID medicationId) {
 
-        if (findById(medicationId).isPresent()){
-            return findById(medicationId).get().getIsActive();
+         var medication = findById(medicationId);
+
+        if (medication.isEmpty()){
+
+            throw new RuntimeException("Medicamento não encontrado para essa Id");
+
         }
-        else throw new RuntimeException("Medicamento não encontrado para essa Id");
+
+        return medication.get().getIsActive();
     }
 
     public Optional<Medication> findById(UUID id) {

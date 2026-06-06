@@ -5,6 +5,7 @@ import com.github.cainamott.nery_farma.impl.dto.MedicationOrderRequestDTO;
 import com.github.cainamott.nery_farma.impl.service.MedicationOrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,8 +16,11 @@ public class MedicationOrderController {
 
     private final MedicationOrderService medicationOrderService;
 
+    @PostMapping("/newOrder")
     public ResponseEntity<MedicationOrderDTO> createNewMedicationOrder(MedicationOrderRequestDTO requestDTO) {
 
         return ResponseEntity.ok(medicationOrderService.createNewOrder(requestDTO));
     }
+
+
 }

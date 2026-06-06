@@ -3,6 +3,7 @@ package com.github.cainamott.nery_farma.impl.models;
 import com.github.cainamott.nery_farma.impl.enums.MovementType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "movimentacoes", schema = "nf_owner")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Movement {

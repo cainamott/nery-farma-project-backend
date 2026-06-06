@@ -2,6 +2,8 @@ package com.github.cainamott.nery_farma.impl.service;
 
 import com.github.cainamott.nery_farma.impl.dto.MedicationOrderDTO;
 import com.github.cainamott.nery_farma.impl.dto.MedicationOrderRequestDTO;
+import com.github.cainamott.nery_farma.impl.dto.MovementDTO;
+import com.github.cainamott.nery_farma.impl.dto.UpdateOrderRequest;
 import com.github.cainamott.nery_farma.impl.mappers.MedicationOrderMapper;
 import com.github.cainamott.nery_farma.impl.models.Medication;
 import com.github.cainamott.nery_farma.impl.models.MedicationOrder;
@@ -31,6 +33,27 @@ public class MedicationOrderService {
         orderRepository.save(medicationOrder);
 
         return orderMapper.mapToDto(medicationOrder);
+    }
+
+    public void receiveCargoMovementUpdate(UpdateOrderRequest updateRequest) {
+
+        // request de update de cargo com a situação atual e qual a atualização
+        // basicamente update em banco
+    }
+
+
+    public MovementDTO receiveOrder(OrderReceivementRequest receivementRequest) {
+
+        // recebe request
+
+        // buscar pela order da request
+
+        // checar o estado da order (se estiver ok vai para o prox passo)
+
+        // update para concluido
+
+        // gera entrada de estoque com estado intermediario esperando conferencia
+
     }
 
 

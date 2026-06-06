@@ -20,14 +20,13 @@ public class MovementMapper {
             return null;
         }
 
-        return new Movement(
-                null,                       // id gerado pelo banco
-                batch,
-                MovementType.ENTRY,
-                stockEntryDTO.quantity(),
-                null,
-                new Date()                  // criado_em preenchido no momento do registro
-        );
+        return Movement.builder()
+                .batch(batch)
+                .type(MovementType.ENTRY)
+                .quantity(stockEntryDTO.quantity())
+                .createdAt(new Date())
+                .build();
+
     }
 
     public Movement mapDispatchToEntity(StockDispatchDTO stockDispatchDTO, Batch batch) {
@@ -36,14 +35,13 @@ public class MovementMapper {
             return null;
         }
 
-        return new Movement(
-                null,
-                batch,
-                MovementType.DISPATCH,
-                stockDispatchDTO.quantity(),
-                null,
-                new Date()
-        );
+        return Movement.builder()
+                .batch(batch)
+                .type(MovementType.DISPATCH)
+                .quantity(stockDispatchDTO.quantity())
+                .createdAt(new Date())
+                .build();
+
     }
 
     public MovementDTO mapToDto(Movement movement) {

@@ -1,7 +1,6 @@
 package com.github.cainamott.nery_farma.impl.exceptions;
 
-import com.github.cainamott.nery_farma.impl.dto.ErrorResponseDTO;
-import org.apache.coyote.Response;
+import com.github.cainamott.nery_farma.auth.dto.ErrorResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;

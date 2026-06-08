@@ -1,5 +1,6 @@
 package com.github.cainamott.nery_farma.impl.models;
 
+import com.github.cainamott.nery_farma.auth.models.User;
 import com.github.cainamott.nery_farma.impl.enums.MedicationOrderStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -66,11 +66,13 @@ public class MovementService {
 
         // validar o lote/medicamento
         medicationService.validateMedication(dispatchDTO.medicationId());
-        batchService.findByBatchNumber(dispatchDTO.batchNumber()).get();
+        var batchFound = batchService.findByBatchNumber(dispatchDTO.batchNumber()).get();
         batchService.validateBatch(
                 dispatchDTO.batchNumber(),
                 batchFound.getExpirationDate(),
                 batchFound.getCurrentQuantity());
+
+        return null;
 
         // mapear para saida
         // gerar movimento de saida e decrementar estoque

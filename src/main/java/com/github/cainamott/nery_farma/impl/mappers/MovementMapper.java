@@ -6,7 +6,6 @@ import com.github.cainamott.nery_farma.impl.dto.StockEntryDTO;
 import com.github.cainamott.nery_farma.impl.enums.MovementType;
 import com.github.cainamott.nery_farma.impl.models.Batch;
 import com.github.cainamott.nery_farma.impl.models.Movement;
-import com.github.cainamott.nery_farma.impl.models.User;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;

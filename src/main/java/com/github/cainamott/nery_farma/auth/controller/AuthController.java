@@ -1,17 +1,13 @@
-package com.github.cainamott.nery_farma.impl.controller;
+package com.github.cainamott.nery_farma.auth.controller;
 
-import com.github.cainamott.nery_farma.impl.dto.AuthResponseDTO;
-import com.github.cainamott.nery_farma.impl.dto.LoginRequestDTO;
-import com.github.cainamott.nery_farma.impl.models.User;
-import com.github.cainamott.nery_farma.impl.service.JwtService;
-import com.github.cainamott.nery_farma.impl.service.UserDetailsServiceImpl;
+import com.github.cainamott.nery_farma.auth.dto.AuthResponseDTO;
+import com.github.cainamott.nery_farma.auth.dto.LoginRequestDTO;
+import com.github.cainamott.nery_farma.auth.models.User;
+import com.github.cainamott.nery_farma.auth.service.JwtService;
+import com.github.cainamott.nery_farma.auth.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;

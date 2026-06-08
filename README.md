@@ -1,3 +1,7 @@
+# FOR DUMMIES -> docker compose down -v 
+# -> docker compose up --build
+
+
 # RASCUNHO  nery-farma-project
 # 💊 NeryFarma
 

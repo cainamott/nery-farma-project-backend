@@ -1,8 +1,6 @@
-package com.github.cainamott.nery_farma.impl.security;
+package com.github.cainamott.nery_farma.auth.security;
 
-import com.github.cainamott.nery_farma.impl.service.JwtService;
-import com.github.cainamott.nery_farma.impl.service.UserDetailsServiceImpl;
-import jakarta.servlet.annotation.WebServlet;
+import com.github.cainamott.nery_farma.auth.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,12 +12,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -45,13 +41,11 @@ public class SecurityConfig {
                                 SessionCreationPolicy.STATELESS
                         ))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(
+                        /*auth.requestMatchers(
                                 "/neryfarma/api/auth/login",
                                 "/neryfarma/api/auth/register"
-                        )
-                                .permitAll()
-                                .anyRequest()
-                                .authenticated()
+                        )*/auth.anyRequest().permitAll()
+                                //.authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

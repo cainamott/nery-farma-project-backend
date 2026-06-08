@@ -1,6 +1,6 @@
-package com.github.cainamott.nery_farma.impl.repository;
+package com.github.cainamott.nery_farma.auth.repository;
 
-import com.github.cainamott.nery_farma.impl.models.User;
+import com.github.cainamott.nery_farma.auth.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 

@@ -1,8 +1,7 @@
 package com.github.cainamott.nery_farma.impl.dto;
 
 import com.github.cainamott.nery_farma.impl.enums.MedicationOrderStatus;
-import com.github.cainamott.nery_farma.impl.models.Medication;
-import com.github.cainamott.nery_farma.impl.models.User;
+import com.github.cainamott.nery_farma.auth.models.User;
 import lombok.Builder;
 
 import java.util.UUID;

@@ -4,6 +4,7 @@ import com.github.cainamott.nery_farma.impl.dto.CategoryDTO;
 import com.github.cainamott.nery_farma.impl.mappers.CategoryMapper;
 import com.github.cainamott.nery_farma.impl.models.Category;
 import com.github.cainamott.nery_farma.impl.repository.CategoryRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +14,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@AllArgsConstructor
 public class CategoryService {
 
-    @Autowired
-    private static CategoryRepository repository;
 
-    @Autowired
+    private static CategoryRepository repository;
     private static CategoryMapper mapper;
 
     public void createCategory(CategoryDTO categoryDTO){

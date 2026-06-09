@@ -1,17 +1,15 @@
-package com.github.cainamott.nery_farma.impl.security;
+package com.github.cainamott.nery_farma.auth.security;
 
-import com.github.cainamott.nery_farma.impl.service.JwtService;
-import com.github.cainamott.nery_farma.impl.service.UserDetailsServiceImpl;
+import com.github.cainamott.nery_farma.auth.service.JwtService;
+import com.github.cainamott.nery_farma.auth.service.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;

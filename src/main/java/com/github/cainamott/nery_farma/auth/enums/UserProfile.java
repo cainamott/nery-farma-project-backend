@@ -1,9 +1,8 @@
-package com.github.cainamott.nery_farma.impl.enums;
+package com.github.cainamott.nery_farma.auth.enums;
 
 import com.github.cainamott.nery_farma.impl.exceptions.NonCompatibleObject;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.stereotype.Component;
 
 public enum UserProfile implements GrantedAuthority {
 

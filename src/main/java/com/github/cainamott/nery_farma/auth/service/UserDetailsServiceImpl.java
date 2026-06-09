@@ -1,7 +1,7 @@
-package com.github.cainamott.nery_farma.impl.service;
+package com.github.cainamott.nery_farma.auth.service;
 
-import com.github.cainamott.nery_farma.impl.repository.UserRepository;
-import com.github.cainamott.nery_farma.impl.models.User;
+import com.github.cainamott.nery_farma.auth.models.User;
+import com.github.cainamott.nery_farma.auth.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;

@@ -1,15 +1,9 @@
 package com.github.cainamott.nery_farma.impl.mappers;
 
 import com.github.cainamott.nery_farma.impl.dto.CategoryDTO;
-import com.github.cainamott.nery_farma.impl.dto.UserDTO;
 import com.github.cainamott.nery_farma.impl.models.Category;
-import com.github.cainamott.nery_farma.impl.models.User;
 import com.github.cainamott.nery_farma.impl.repository.CategoryRepository;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
-
-import static com.github.cainamott.nery_farma.impl.enums.UserProfile.fromApi;
 
 @Component
 public class CategoryMapper {

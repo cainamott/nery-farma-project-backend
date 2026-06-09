@@ -29,5 +29,6 @@ public class MovementController {
     public ResponseEntity medicationDispatchMovement(StockDispatchDTO dispatchDTO) {
         movementService.stockDispatch(dispatchDTO);
 
+        return null;
     }
 }

@@ -29,7 +29,7 @@ public class MedicationController {
         return ResponseEntity.status(201).build();
     }
 
-    @GetMapping
+    @GetMapping("/search")
     public ResponseEntity<MedicationDTO> findMedicationByName(@NotBlank @RequestParam("name") String name) {
 
         return ResponseEntity.status(200).body(medicationService.findByMedicationName(name));

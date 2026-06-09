@@ -1,12 +1,10 @@
-package com.github.cainamott.nery_farma.impl.mappers;
+package com.github.cainamott.nery_farma.auth.mapper;
 
-import com.github.cainamott.nery_farma.impl.dto.CreateUserDTO;
+import com.github.cainamott.nery_farma.auth.models.User;
 import com.github.cainamott.nery_farma.impl.dto.UserDTO;
-import com.github.cainamott.nery_farma.impl.enums.UserProfile;
-import com.github.cainamott.nery_farma.impl.models.User;
 import org.springframework.stereotype.Component;
 
-import static com.github.cainamott.nery_farma.impl.enums.UserProfile.fromApi;
+import static com.github.cainamott.nery_farma.auth.enums.UserProfile.fromApi;
 
 @Component
 public class UserMapper {

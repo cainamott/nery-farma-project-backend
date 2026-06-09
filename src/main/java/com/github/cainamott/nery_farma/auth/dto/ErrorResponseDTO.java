@@ -1,7 +1,6 @@
-package com.github.cainamott.nery_farma.impl.dto;
+package com.github.cainamott.nery_farma.auth.dto;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public record ErrorResponseDTO(
 

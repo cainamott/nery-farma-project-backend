@@ -1,9 +1,6 @@
 package com.github.cainamott.nery_farma.impl.service;
 
-import com.github.cainamott.nery_farma.impl.dto.MedicationOrderDTO;
-import com.github.cainamott.nery_farma.impl.dto.MedicationOrderRequestDTO;
-import com.github.cainamott.nery_farma.impl.dto.MovementDTO;
-import com.github.cainamott.nery_farma.impl.dto.UpdateOrderRequest;
+import com.github.cainamott.nery_farma.impl.dto.*;
 import com.github.cainamott.nery_farma.impl.mappers.MedicationOrderMapper;
 import com.github.cainamott.nery_farma.impl.models.Medication;
 import com.github.cainamott.nery_farma.impl.models.MedicationOrder;
@@ -53,6 +50,8 @@ public class MedicationOrderService {
         // update para concluido
 
         // gera entrada de estoque com estado intermediario esperando conferencia
+
+        return null;
 
     }
 

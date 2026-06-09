@@ -1,6 +1,6 @@
-package com.github.cainamott.nery_farma.impl.models;
+package com.github.cainamott.nery_farma.auth.models;
 
-import com.github.cainamott.nery_farma.impl.enums.UserProfile;
+import com.github.cainamott.nery_farma.auth.enums.UserProfile;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

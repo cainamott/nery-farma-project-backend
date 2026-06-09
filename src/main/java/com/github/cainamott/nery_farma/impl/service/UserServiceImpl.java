@@ -1,8 +1,8 @@
 package com.github.cainamott.nery_farma.impl.service;
 
-import com.github.cainamott.nery_farma.impl.dto.CreateUserDTO;
-import com.github.cainamott.nery_farma.impl.models.User;
-import com.github.cainamott.nery_farma.impl.repository.UserRepository;
+import com.github.cainamott.nery_farma.auth.dto.CreateUserDTO;
+import com.github.cainamott.nery_farma.auth.models.User;
+import com.github.cainamott.nery_farma.auth.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
-import static com.github.cainamott.nery_farma.impl.enums.UserProfile.fromApi;
+import static com.github.cainamott.nery_farma.auth.enums.UserProfile.fromApi;
 
 @Service
 public class UserServiceImpl implements  UserDetailsService {

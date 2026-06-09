@@ -1,6 +1,6 @@
-package com.github.cainamott.nery_farma.impl.dto;
+package com.github.cainamott.nery_farma.auth.dto;
 
-import com.github.cainamott.nery_farma.impl.enums.UserProfile;
+import com.github.cainamott.nery_farma.auth.enums.UserProfile;
 
 import java.util.Date;
 

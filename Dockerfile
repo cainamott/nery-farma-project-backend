@@ -1,7 +1,5 @@
-FROM ubuntu:latest
-LABEL authors="caina"
-
-ENTRYPOINT ["top", "-b"]
+# FROM ubuntu:latest
+# LABEL authors="caina"
 
 # Etapa 1 — Build da aplicação
 FROM maven:3.9-eclipse-temurin-21 AS build

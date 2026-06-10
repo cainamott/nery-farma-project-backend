@@ -5,6 +5,7 @@ import com.github.cainamott.nery_farma.impl.dto.MedicationDTO;
 import com.github.cainamott.nery_farma.impl.service.MedicationService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -16,17 +17,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/neryfarma/api/medications")
+@AllArgsConstructor
 public class MedicationController {
 
-    private static MedicationService medicationService;
-
+    private final MedicationService medicationService;
 
     @PostMapping("/create")
-    public ResponseEntity createMedication(@Valid @RequestBody CreateMedicationDTO request) {
+    public ResponseEntity<MedicationDTO> createMedication(@RequestBody @Valid CreateMedicationDTO request) {
 
-        medicationService.createMedication(request);
 
-        return ResponseEntity.status(201).build();
+        return ResponseEntity.status(201).body(medicationService.createMedication(request));
     }
 
     @GetMapping("/search")

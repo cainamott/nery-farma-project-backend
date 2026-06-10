@@ -1,6 +1,7 @@
 package com.github.cainamott.nery_farma.impl.controller;
 
 import com.github.cainamott.nery_farma.impl.dto.CategoryDTO;
+import com.github.cainamott.nery_farma.impl.dto.CreateCategoryRequest;
 import com.github.cainamott.nery_farma.impl.models.Category;
 import com.github.cainamott.nery_farma.impl.service.CategoryService;
 import jakarta.validation.Valid;
@@ -18,12 +19,12 @@ import java.util.List;
 @AllArgsConstructor
 public class CategoryController {
 
-    private static CategoryService categoryService;
+    private final CategoryService categoryService;
 
     @PostMapping("/create")
-    public ResponseEntity<Category> createNewCategory(@Valid @RequestBody CategoryDTO categoryDTO){
-        categoryService.createCategory(categoryDTO);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Category> createNewCategory(@RequestBody @Valid CreateCategoryRequest createCategoryRequest){
+
+        return ResponseEntity.ok(categoryService.createCategory(createCategoryRequest));
     }
 
     @GetMapping("/all")
@@ -32,7 +33,7 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.listAllCategories());
     }
 
-    @GetMapping()   // finalizar
+    @GetMapping("/{label}")   // finalizar
     public ResponseEntity<CategoryDTO> findCategoryByLabel(@NotBlank @RequestParam("label") String label) {
 
         return ResponseEntity.status(200).body(categoryService.findCategoryByLabel(label));

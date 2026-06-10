@@ -15,10 +15,10 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    @Value("${JWT.SECRET}")
+    //@Value("${JWT.SECRET}")
     private String secret;
 
-    @Value("${JWT.EXPIRATION}")
+    //@Value("${JWT.EXPIRATION}")
     private long expiration;
 
 

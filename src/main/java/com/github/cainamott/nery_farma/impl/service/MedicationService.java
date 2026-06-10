@@ -5,6 +5,7 @@ import com.github.cainamott.nery_farma.impl.dto.CreateMedicationDTO;
 import com.github.cainamott.nery_farma.impl.mappers.MedicationMapper;
 import com.github.cainamott.nery_farma.impl.models.Medication;
 import com.github.cainamott.nery_farma.impl.repository.MedicationRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,15 +17,12 @@ import java.util.UUID;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class MedicationService {
 
     private final MedicationRepository repository;
     private final MedicationMapper mapper;
-
-    public MedicationService(MedicationRepository repository, MedicationMapper mapper) {
-        this.repository = repository;
-        this.mapper = mapper;
-    }
+    private final CategoryService categoryService;
 
     public Page<MedicationDTO> findAllMedications(Pageable pageable) {
 
@@ -32,25 +30,28 @@ public class MedicationService {
     }
 
 
-    public void createMedication(CreateMedicationDTO medicationDto) {
+    public MedicationDTO createMedication(CreateMedicationDTO medicationDto) {
 
-        if((repository.findByMedicationNameIgnoreCase(medicationDto.medicationName()) == null)) {
+        if((repository.findByMedicationNameIgnoreCase(medicationDto.medicationName()).isPresent())) {
 
-            Medication medication = mapper.mapToEntity(new MedicationDTO(
-                    UUID.randomUUID(),
-                    medicationDto.medicationName(),
-                    medicationDto.categoryId(),
-                    medicationDto.activePrinciple(),
-                    medicationDto.dosageForm(),
-                    medicationDto.unitary(),
-                    medicationDto.minimalStorage(),
-                    Date.from(Instant.now()),
-                    medicationDto.isActive()
-            ));
+            throw new RuntimeException("Medicamento com esse nome já existe");
 
-            repository.save(medication);
         }
+
+        var medication = Medication.builder()
+                .medicationName(medicationDto.medicationName())
+                .category(categoryService.findById(medicationDto.categoryId()))
+                .activePrinciple(medicationDto.activePrinciple())
+                .dosageForm(medicationDto.dosageForm())
+                .unitary(medicationDto.unitary())
+                .insertionDate(Date.from(Instant.now()))
+                .isActive(medicationDto.isActive()).build();
+
+        repository.save(medication);
+
+        return mapper.mapToDto(medication);
     }
+
 
     public MedicationDTO findByMedicationName(String name) {
 
@@ -58,7 +59,7 @@ public class MedicationService {
             throw new IllegalArgumentException("Nome não pode ser nulo");
         }
 
-        return mapper.mapToDto(repository.findByMedicationNameIgnoreCase(name));
+        return mapper.mapToDto(repository.findByMedicationNameIgnoreCase(name).get());
     }
 
     public void deleteMedication(String name) {
@@ -66,7 +67,7 @@ public class MedicationService {
             throw new IllegalArgumentException("Nome não pode ser nulo");
         }
 
-        Medication medication = repository.findByMedicationNameIgnoreCase(name);
+        Medication medication = repository.findByMedicationNameIgnoreCase(name).get();
 
         if(medication != null) {
             repository.delete(medication);
@@ -82,7 +83,7 @@ public class MedicationService {
             Medication updatedMedication = mapper.mapToEntity(new MedicationDTO(
                     id,
                     medicationDto.medicationName(),
-                    medicationDto.categoryId(),
+                    categoryService.findById(medicationDto.categoryId()),
                     medicationDto.activePrinciple(),
                     medicationDto.dosageForm(),
                     medicationDto.unitary(),

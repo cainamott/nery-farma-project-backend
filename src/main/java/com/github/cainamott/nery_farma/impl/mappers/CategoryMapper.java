@@ -3,12 +3,11 @@ package com.github.cainamott.nery_farma.impl.mappers;
 import com.github.cainamott.nery_farma.impl.dto.CategoryDTO;
 import com.github.cainamott.nery_farma.impl.models.Category;
 import com.github.cainamott.nery_farma.impl.repository.CategoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CategoryMapper {
-
-    private static CategoryRepository repository;
 
     public Category mapToEntity(CategoryDTO categoryDto) {
 

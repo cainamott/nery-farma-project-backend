@@ -8,7 +8,7 @@ import java.util.UUID;
 public record MedicationDTO(
         UUID id,
         String medicationName,
-        UUID categoryId,
+        Category categoryId,
         String activePrinciple,
         String dosageForm,
         String unitary,

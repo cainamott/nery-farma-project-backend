@@ -17,7 +17,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Medication {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;

@@ -20,15 +20,12 @@ import java.util.UUID;
 public class BatchService {
 
     private final BatchRepository repository;
-
     private final MedicationService medicationService;
-
-    private static BatchMapper mapper;
+    private final BatchMapper mapper;
 
     public BatchDTO getBatchByExpirationDate(UUID medicationId) {
 
-        BatchDTO dto = mapper.mapToDto(repository.
-                findByMedicationIdOrderByExpirationDateAsc(medicationId));
+        BatchDTO dto = mapper.mapToDto(repository.findByMedicationIdOrderByExpirationDateAsc(medicationId));
 
         if (validateBatch(dto.batchNumber(), dto.expirationDate(), dto.currentQuantity()) == false) {
             throw new RuntimeException("Lote mais recente é inválido!");
@@ -44,7 +41,6 @@ public class BatchService {
         return repository.save(
 
                 Batch.builder()
-                        .id(UUID.randomUUID())
                         .medication(medication)
                         .batchNumber(generateNewBatchNumber(medication.getId()))
                         .fabricationDate(batchDTO.fabricationDate())

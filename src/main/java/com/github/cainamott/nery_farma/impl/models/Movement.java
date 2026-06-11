@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "movimentacoes", schema = "nf_owner")
+@Table(name = "movimentacoes") //, schema = "nf_owner")
 @Data
 @Builder
 @AllArgsConstructor

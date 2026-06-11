@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "pedidos_medicamento", schema = "nf_owner")
+@Table(name = "pedidos_medicamento") //, schema = "nf_owner")
 @Data
 @Builder
 @AllArgsConstructor

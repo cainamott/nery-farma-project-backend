@@ -98,7 +98,7 @@ public class MedicationService {
 
     public Boolean validateMedication(UUID medicationId) {
 
-         var medication = findById(medicationId);
+        var medication = findById(medicationId);
 
         if (medication.isEmpty()){
 

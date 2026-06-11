@@ -27,17 +27,17 @@ public class MedicationController {
 
 
         return ResponseEntity.status(201).body(medicationService.createMedication(request));
-    }
+}
 
     @GetMapping("/search")
-    public ResponseEntity<MedicationDTO> findMedicationByName(@NotBlank @RequestParam("name") String name) {
+    public ResponseEntity<MedicationDTO> findMedicationByName(@RequestParam("medicationName") @NotBlank String name) {
 
         return ResponseEntity.status(200).body(medicationService.findByMedicationName(name));
     }
 
-    @GetMapping
+    @GetMapping("/search/all")
     public ResponseEntity<Page<MedicationDTO>> findAllMedications(
-            @PageableDefault(size = 10, sort = "name", direction = Sort.Direction.ASC) Pageable pageable) {
+            @PageableDefault(size = 10, sort = "medicationName", direction = Sort.Direction.ASC) Pageable pageable) {
 
         return ResponseEntity.ok(medicationService.findAllMedications(pageable));
     }

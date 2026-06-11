@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +20,7 @@ public class MovementController {
     private final MovementService movementService;
 
     @PostMapping("/entry")
-    public ResponseEntity medicationEntryMovement(StockEntryDTO entryDTO) {
+    public ResponseEntity medicationEntryMovement(@RequestBody StockEntryDTO entryDTO) {
         movementService.stockEntry(entryDTO);
         return ResponseEntity.accepted().build();
     }

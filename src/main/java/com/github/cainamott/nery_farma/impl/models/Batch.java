@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "lotes", schema = "nf_owner")
+@Table(name = "lotes") //, schema = "nf_owner")
 @Data
 @Builder
 @AllArgsConstructor

@@ -1,7 +1,6 @@
 package com.github.cainamott.nery_farma.auth.enums;
 
 import com.github.cainamott.nery_farma.impl.exceptions.NonCompatibleObject;
-import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 
 public enum UserProfile implements GrantedAuthority {
@@ -34,7 +33,7 @@ public enum UserProfile implements GrantedAuthority {
     }
 
     @Override
-    public @Nullable String getAuthority() {
+    public String getAuthority() {
         return "ROLE_" + this.name();
     }
 }

@@ -42,14 +42,16 @@ public class MovementService {
 
         if ((batchService.findByBatchNumber(dto.batchNumber()).isEmpty())) {
 
-            return batchMapper.mapToDto(batchService.createNewBatch(BatchRequestDTO
-                    .builder()
-                    .batchNumber(dto.batchNumber())
-                    .medicationId(dto.medicationId())
-                    .expirationDate(dto.expirationDate())
-                    .fabricationDate(dto.fabricationDate())
-                    .currentQuantity(dto.quantity())
-                    .build()));
+            var newBatch = batchService.createNewBatch(BatchRequestDTO
+                                        .builder()
+                                        .batchNumber(dto.batchNumber())
+                                        .medicationId(dto.medicationId())
+                                        .expirationDate(dto.expirationDate())
+                                        .fabricationDate(dto.fabricationDate())
+                                        .currentQuantity(dto.quantity())
+                                        .build());
+
+            return batchMapper.mapToDto(newBatch);
         }
         else return null;
     }

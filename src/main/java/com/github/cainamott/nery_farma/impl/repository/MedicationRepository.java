@@ -13,7 +13,7 @@ public interface MedicationRepository extends JpaRepository<Medication, UUID> {
 
     Optional<Medication> findByMedicationNameIgnoreCase(String name);
 
-    List<String> findByCategoryId(Integer id);
+    List<String> findByCategoryId(UUID id);
 
     Page<Medication> findAll(Pageable pageable);
 }

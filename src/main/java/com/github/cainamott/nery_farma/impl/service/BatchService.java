@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,6 +27,11 @@ public class BatchService {
     public BatchDTO getBatchByExpirationDate(UUID medicationId) {
 
         BatchDTO dto = mapper.mapToDto(repository.findByMedicationIdOrderByExpirationDateAsc(medicationId));
+
+        if(dto == null) {
+
+            return null;
+        }
 
         if (validateBatch(dto.batchNumber(), dto.expirationDate(), dto.currentQuantity()) == false) {
             throw new RuntimeException("Lote mais recente é inválido!");
@@ -60,11 +66,11 @@ public class BatchService {
         return repository.findById(batchId);
     }
 
-    public Boolean validateBatch(Integer batchNumber, Date expirationDate, Integer quantity) {
+    public Boolean validateBatch(Integer batchNumber, LocalDate expirationDate, Integer quantity) {
 
         var batchFound = findByBatchNumber(batchNumber).get();
 
-        if (batchFound.getCurrentQuantity() < 0 || findByBatchNumber(batchNumber).isEmpty() || expirationDate.before(Date.from(Instant.now()))){
+        if (batchFound.getCurrentQuantity() < 0 || findByBatchNumber(batchNumber).isEmpty() || expirationDate.isBefore(LocalDate.now())){
             return Boolean.FALSE;
         }
         else return Boolean.TRUE;
@@ -73,7 +79,11 @@ public class BatchService {
     private Integer generateNewBatchNumber(UUID id) {
 
         var latestBatch = getBatchByExpirationDate(id);
-        return latestBatch.batchNumber() + 1;
+        if(latestBatch == null){
+            return 1;
+        } else {
+            return latestBatch.batchNumber() + 1;
+        }
     }
 
     public Integer addQuantityToBatch(UUID medicationId, Integer quantity) {

@@ -8,7 +8,7 @@ import com.github.cainamott.nery_farma.impl.models.Batch;
 import com.github.cainamott.nery_farma.impl.models.Movement;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Component
 public class MovementMapper {
@@ -23,7 +23,7 @@ public class MovementMapper {
                 .batch(batch)
                 .type(MovementType.ENTRY)
                 .quantity(stockEntryDTO.quantity())
-                .createdAt(new Date())
+                .createdAt(LocalDate.now())
                 .build();
 
     }
@@ -38,7 +38,7 @@ public class MovementMapper {
                 .batch(batch)
                 .type(MovementType.DISPATCH)
                 .quantity(stockDispatchDTO.quantity())
-                .createdAt(new Date())
+                .createdAt(LocalDate.now())
                 .build();
 
     }

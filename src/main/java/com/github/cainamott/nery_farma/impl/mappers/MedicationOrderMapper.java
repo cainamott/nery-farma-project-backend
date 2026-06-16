@@ -1,24 +1,20 @@
 package com.github.cainamott.nery_farma.impl.mappers;
 
 import com.github.cainamott.nery_farma.impl.dto.MedicationOrderDTO;
-import com.github.cainamott.nery_farma.impl.dto.MedicationOrderRequestDTO;
+import com.github.cainamott.nery_farma.impl.dto.MedicationOrderRequest;
 import com.github.cainamott.nery_farma.impl.enums.MedicationOrderStatus;
 import com.github.cainamott.nery_farma.impl.models.Medication;
 import com.github.cainamott.nery_farma.impl.models.MedicationOrder;
 import com.github.cainamott.nery_farma.impl.models.Movement;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.Date;
-import java.util.UUID;
 
 @Component
 public class MedicationOrderMapper {
 
-    public MedicationOrder mapToEntity(MedicationOrderRequestDTO dto,
-                                       Medication medication,
-                                       User requester) {
-
+    public MedicationOrder mapToEntity(MedicationOrderRequest dto, Medication medication, MedicationOrderStatus status) {
         if (dto == null) {
             return null;
         }
@@ -26,12 +22,12 @@ public class MedicationOrderMapper {
         return MedicationOrder.builder()
                 .medication(medication)
                 .requestedQuantity(dto.requestedQuantity())
-                .reason(dto.reason())
-                .status(MedicationOrderStatus.PENDING)
-                .requester(null)
+                .reason(dto.message())
+                .status(status)
+                .healthUnityId(dto.healthUnityId())
                 .movement(null)
-                .createdAt(new Date())
-                .updatedAt(new Date())
+                .createdAt(LocalDate.now())
+                .updatedAt(LocalDate.now())
                 .build();
     }
 

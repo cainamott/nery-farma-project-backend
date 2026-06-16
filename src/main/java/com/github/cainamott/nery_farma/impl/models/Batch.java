@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -30,11 +31,11 @@ public class Batch {
 
     @Column(name = "data_de_fabricacao", columnDefinition = "DATE")
     @Temporal(TemporalType.DATE)
-    private Date fabricationDate;
+    private LocalDate fabricationDate;
 
     @Column(name = "data_de_validade", columnDefinition = "DATE", nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date expirationDate;
+    private LocalDate expirationDate;
 
     @Column(name = "quantidade_atual", nullable = false)
     private Integer currentQuantity;

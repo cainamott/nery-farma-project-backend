@@ -47,7 +47,7 @@ public class BatchMapper {
         );
     }
 
-    public StockEntryDTO mapDtoToStockEntryDto(BatchDTO batchDTO) {
+    public StockEntryDTO mapDtoToStockEntryDto(BatchDTO batchDTO, StockEntryDTO entryDTO) {
 
         if (batchDTO == null) {
             return null;
@@ -60,7 +60,7 @@ public class BatchMapper {
                 .expirationDate(batchDTO.expirationDate())
                 .existingBatchId(batchDTO.id())
                 .quantity(batchDTO.currentQuantity())
-                .reason(null) // razão não existe no BatchDTO, preencher conforme necessidade
+                .reason(entryDTO.reason()) // razão não existe no BatchDTO, preencher conforme necessidade
                 .build();
     }
 }

@@ -20,8 +20,8 @@ public class MovementService {
     public final MovementRepository movementRepository;
     public final MedicationService medicationService;
     public final BatchService batchService;
-    public static BatchMapper batchMapper;
-    public static MovementMapper movementMapper;
+    public final BatchMapper batchMapper;
+    public final MovementMapper movementMapper;
 
     //entrada de estoque
     public BatchDTO stockEntry(StockEntryDTO entryDTO) {
@@ -29,7 +29,7 @@ public class MovementService {
         medicationService.validateMedication(entryDTO.medicationId());
         var dto = entryValidation(entryDTO);
         if(dto != null) {
-            entryDTO = batchMapper.mapDtoToStockEntryDto(dto);
+            entryDTO = batchMapper.mapDtoToStockEntryDto(dto, entryDTO);
         }
         stockEntryMethod(entryDTO);
         Batch updatedBatch = batchService.findByBatchNumber(entryDTO.batchNumber()).orElseThrow();

@@ -3,6 +3,7 @@ package com.github.cainamott.nery_farma.impl.dto;
 import com.github.cainamott.nery_farma.impl.enums.MedicationOrderStatus;
 import com.github.cainamott.nery_farma.impl.models.Movement;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -14,6 +15,6 @@ public record MedicationOrderDTO(
         MedicationOrderStatus status,
         UUID requesterId,
         Movement movementId,
-        Date createdAt
+        LocalDate createdAt
 ) {
 }

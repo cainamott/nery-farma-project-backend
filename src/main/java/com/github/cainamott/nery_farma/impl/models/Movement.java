@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -42,8 +43,7 @@ public class Movement {
     @JoinColumn(name = "usuario_id", nullable = false)
     private User user;*/
 
-    @Column(name = "criado_em", columnDefinition = "TIMESTAMP", updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    @Column(name = "criado_em", updatable = false)
+    private LocalDate createdAt;
 
 }

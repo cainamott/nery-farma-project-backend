@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -44,7 +45,7 @@ public class MedicationService {
                 .activePrinciple(medicationDto.activePrinciple())
                 .dosageForm(medicationDto.dosageForm())
                 .unitary(medicationDto.unitary())
-                .insertionDate(Date.from(Instant.now()))
+                .insertionDate(LocalDate.now())
                 .isActive(medicationDto.isActive()).build();
 
         repository.save(medication);
@@ -88,7 +89,7 @@ public class MedicationService {
                     medicationDto.dosageForm(),
                     medicationDto.unitary(),
                     medicationDto.minimalStorage(),
-                    Date.from(Instant.now()),
+                    LocalDate.now(),
                     medicationDto.isActive()
             ));
 

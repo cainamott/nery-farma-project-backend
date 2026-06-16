@@ -2,9 +2,10 @@ package com.github.cainamott.nery_farma.impl.dto;
 
 import java.util.UUID;
 
-public record MedicationOrderRequestDTO(
+public record MedicationOrderRequest(
         UUID medicationId,
         Integer requestedQuantity,
-        String reason
+        String message,
+        Integer healthUnityId
 ) {
 }

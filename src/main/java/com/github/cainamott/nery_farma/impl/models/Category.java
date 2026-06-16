@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -28,6 +29,6 @@ public class Category {
     private String description;
 
     @Column(name = "data_criacao", columnDefinition = "DATE")
-    private Date creationDate;
+    private LocalDate creationDate;
 
 }

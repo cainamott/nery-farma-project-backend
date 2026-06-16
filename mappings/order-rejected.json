@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/medication-orders",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$[?(@.requestedQuantity == null || @.requestedQuantity <= 0)]"
+      }
+    ]
+  },
+  "response": {
+    "status": 422,
+    "headers": { "Content-Type": "application/json" },
+    "jsonBody": {
+      "status": "REJECTED",
+      "message": "Quantidade inválida ou não informada"
+    }
+  }
+}

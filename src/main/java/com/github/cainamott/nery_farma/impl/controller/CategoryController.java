@@ -24,13 +24,13 @@ public class CategoryController {
     @PostMapping("/create")
     public ResponseEntity<Category> createNewCategory(@RequestBody @Valid CreateCategoryRequest createCategoryRequest){
 
-        return ResponseEntity.ok(categoryService.createCategory(createCategoryRequest));
+        return ResponseEntity.status(201).body(categoryService.createCategory(createCategoryRequest));
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<Category>> listAllCategories() { // Realizar paginação no futuro CRUD basico no momento
 
-        return ResponseEntity.ok(categoryService.listAllCategories());
+        return ResponseEntity.status(201).body(categoryService.listAllCategories());
     }
 
     @GetMapping("/{label}")   // finalizar

@@ -2,6 +2,7 @@ package com.github.cainamott.nery_farma.impl.dto;
 
 import com.github.cainamott.nery_farma.impl.models.Category;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -13,7 +14,7 @@ public record MedicationDTO(
         String dosageForm,
         String unitary,
         Integer minimalStorage,
-        Date insertionDate,
+        LocalDate insertionDate,
         Boolean isActive
 ) {
 }

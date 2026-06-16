@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/medication-orders",
+    "bodyPatterns": [
+      {"matchesJsonPath": "$.medicationId"},
+      {"matchesJsonPath": "$.requestedQuantity"},
+      {"matchesJsonPath": "$.message"},
+      {"matchesJsonPath": "$.healthUnityId"}
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": { "Content-Type": "application/json" },
+    "jsonBody": {
+      "status": "ACCEPTED",
+      "estimatedDeliveryDate": "2026-06-20",
+      "message": "Pedido aceito e em processamento"
+    }
+  }
+}

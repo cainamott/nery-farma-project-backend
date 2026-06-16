@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users", schema = "nf_owner")
+@Table(name = "users") //, schema = "nf_owner")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

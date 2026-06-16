@@ -31,7 +31,7 @@ public class CategoryService {
             return repository.save(Category.builder()
                     .label(createCategoryRequest.label())
                     .description(createCategoryRequest.description())
-                    .creationDate(Date.from(Instant.now()))
+                    .creationDate(LocalDate.now())
                     .build());
 
     }

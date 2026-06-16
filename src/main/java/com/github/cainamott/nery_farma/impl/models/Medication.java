@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -41,7 +42,7 @@ public class Medication {
     private Integer minimalStorage;
 
     @Column(name = "data_insercao", columnDefinition = "DATE")
-    private Date insertionDate;
+    private LocalDate insertionDate;
 
     @Column(name = "ativo")
     private Boolean isActive;

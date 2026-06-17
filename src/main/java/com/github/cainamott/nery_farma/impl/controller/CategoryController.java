@@ -30,10 +30,10 @@ public class CategoryController {
     @GetMapping("/all")
     public ResponseEntity<List<Category>> listAllCategories() { // Realizar paginação no futuro CRUD basico no momento
 
-        return ResponseEntity.status(201).body(categoryService.listAllCategories());
+        return ResponseEntity.status(200).body(categoryService.listAllCategories());
     }
 
-    @GetMapping("/{label}")   // finalizar
+    @GetMapping("/search")   // finalizar
     public ResponseEntity<CategoryDTO> findCategoryByLabel(@NotBlank @RequestParam("label") String label) {
 
         return ResponseEntity.status(200).body(categoryService.findCategoryByLabel(label));

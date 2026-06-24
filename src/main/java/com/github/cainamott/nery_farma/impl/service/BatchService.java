@@ -5,14 +5,15 @@ import com.github.cainamott.nery_farma.impl.dto.BatchRequestDTO;
 import com.github.cainamott.nery_farma.impl.mappers.BatchMapper;
 import com.github.cainamott.nery_farma.impl.models.Batch;
 import com.github.cainamott.nery_farma.impl.models.Medication;
+import com.github.cainamott.nery_farma.impl.pattern.factory.batch.BatchBuildContext;
+import com.github.cainamott.nery_farma.impl.pattern.factory.batch.BatchReconstructionFactory;
+import com.github.cainamott.nery_farma.impl.pattern.factory.batch.NewBatchFactory;
 import com.github.cainamott.nery_farma.impl.repository.BatchRepository;
 import lombok.AllArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,6 +24,8 @@ public class BatchService {
     private final BatchRepository repository;
     private final MedicationService medicationService;
     private final BatchMapper mapper;
+    private final NewBatchFactory newBatchFactory;
+    private final BatchReconstructionFactory batchReconstructionFactory;
 
     public BatchDTO getBatchByExpirationDate(UUID medicationId) {
 
@@ -44,15 +47,16 @@ public class BatchService {
 
         Medication medication = medicationService.findById(batchDTO.medicationId()).orElseThrow();
 
-        return repository.save(
-
-                Batch.builder()
-                        .medication(medication)
-                        .batchNumber(generateNewBatchNumber(medication.getId()))
-                        .fabricationDate(batchDTO.fabricationDate())
-                        .expirationDate(batchDTO.expirationDate())
-                        .currentQuantity(batchDTO.currentQuantity()).build()
+        BatchBuildContext context = new BatchBuildContext(
+                null,
+                medication,
+                generateNewBatchNumber(medication.getId()),
+                batchDTO.fabricationDate(),
+                batchDTO.expirationDate(),
+                batchDTO.currentQuantity()
         );
+
+        return repository.save(newBatchFactory.createBatch(context));
 
     }
 
@@ -90,15 +94,17 @@ public class BatchService {
 
         BatchDTO lote = getBatchByExpirationDate(medicationId);
 
-        repository.save(Batch
-                .builder()
-                .id(lote.id())
-                .medication(medicationService.findById(medicationId).orElseThrow())
-                .batchNumber(lote.batchNumber())
-                .fabricationDate(lote.fabricationDate())
-                .expirationDate(lote.expirationDate())
-                .currentQuantity(lote.currentQuantity() + quantity)
-                .build());
+        Medication medication = medicationService.findById(medicationId).orElseThrow();
+        BatchBuildContext context = new BatchBuildContext(
+                lote.id(),
+                medication,
+                lote.batchNumber(),
+                lote.fabricationDate(),
+                lote.expirationDate(),
+                lote.currentQuantity() + quantity
+        );
+
+        repository.save(batchReconstructionFactory.createBatch(context));
 
         return quantity;
     }
@@ -109,15 +115,17 @@ public class BatchService {
 
         validateBatchMovement(batch, quantity);
 
-        repository.save(Batch
-                .builder()
-                .id(batch.id())
-                .medication(medicationService.findById(medicationId).orElseThrow())
-                .batchNumber(batch.batchNumber())
-                .fabricationDate(batch.fabricationDate())
-                .expirationDate(batch.expirationDate())
-                .currentQuantity(batch.currentQuantity() - quantity)
-                .build());
+        Medication medication = medicationService.findById(medicationId).orElseThrow();
+        BatchBuildContext context = new BatchBuildContext(
+                batch.id(),
+                medication,
+                batch.batchNumber(),
+                batch.fabricationDate(),
+                batch.expirationDate(),
+                batch.currentQuantity() - quantity
+        );
+
+        repository.save(batchReconstructionFactory.createBatch(context));
     }
 
     public void validateBatchMovement(BatchDTO batch, Integer quantity) {

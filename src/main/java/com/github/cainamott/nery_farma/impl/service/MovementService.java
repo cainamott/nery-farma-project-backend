@@ -1,100 +1,23 @@
 package com.github.cainamott.nery_farma.impl.service;
 
 import com.github.cainamott.nery_farma.impl.dto.BatchDTO;
-import com.github.cainamott.nery_farma.impl.dto.BatchRequestDTO;
 import com.github.cainamott.nery_farma.impl.dto.StockDispatchDTO;
 import com.github.cainamott.nery_farma.impl.dto.StockEntryDTO;
-import com.github.cainamott.nery_farma.impl.mappers.BatchMapper;
-import com.github.cainamott.nery_farma.impl.mappers.MovementMapper;
-import com.github.cainamott.nery_farma.impl.models.Batch;
-import com.github.cainamott.nery_farma.impl.repository.MovementRepository;
+import com.github.cainamott.nery_farma.impl.pattern.facade.StockManagementFacade;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class MovementService {
 
-    public final MovementRepository movementRepository;
-    public final MedicationService medicationService;
-    public final BatchService batchService;
-    public final BatchMapper batchMapper;
-    public final MovementMapper movementMapper;
+    private final StockManagementFacade stockManagementFacade;
 
-    //entrada de estoque
     public BatchDTO stockEntry(StockEntryDTO entryDTO) {
-
-        medicationService.validateMedication(entryDTO.medicationId());
-        var dto = entryValidation(entryDTO);
-        if(dto != null) {
-            entryDTO = batchMapper.mapDtoToStockEntryDto(dto, entryDTO);
-        }
-        stockEntryMethod(entryDTO);
-        Batch updatedBatch = batchService.findByBatchNumber(entryDTO.batchNumber()).orElseThrow();
-        movementRepository.save(movementMapper.mapEntryToEntity(entryDTO, updatedBatch));
-        return batchMapper.mapToDto(updatedBatch);
-
+        return stockManagementFacade.registerStockEntry(entryDTO);
     }
 
-    private BatchDTO entryValidation(StockEntryDTO dto) {
-
-        if ((batchService.findByBatchNumber(dto.batchNumber()).isEmpty())) {
-
-            var newBatch = batchService.createNewBatch(BatchRequestDTO
-                                        .builder()
-                                        .batchNumber(dto.batchNumber())
-                                        .medicationId(dto.medicationId())
-                                        .expirationDate(dto.expirationDate())
-                                        .fabricationDate(dto.fabricationDate())
-                                        .currentQuantity(dto.quantity())
-                                        .build());
-
-            return batchMapper.mapToDto(newBatch);
-        }
-        else return null;
+    public BatchDTO stockDispatch(StockDispatchDTO dispatchDTO) {
+        return stockManagementFacade.registerStockDispatch(dispatchDTO);
     }
-
-
-    private void stockEntryMethod(StockEntryDTO dto) {
-
-        batchService.validateBatch(dto.batchNumber(), dto.expirationDate(), dto.quantity());
-        batchService.addQuantityToBatch(dto.medicationId(), dto.quantity());
-
-    }
-
-    public BatchDTO stockDispatch(StockDispatchDTO dispatchDTO){
-
-        // validar o lote/medicamento
-        medicationService.validateMedication(dispatchDTO.medicationId());
-        var batchFound = batchService.findByBatchNumber(dispatchDTO.batchNumber()).get();
-        batchService.validateBatch(
-                dispatchDTO.batchNumber(),
-                batchFound.getExpirationDate(),
-                batchFound.getCurrentQuantity());
-
-        return null;
-
-        // mapear para saida
-        // gerar movimento de saida e decrementar estoque
-    }
-
-    private void stockRemovalMethod(StockEntryDTO dto) {
-
-        batchService.removeQuantityFromBatch(
-                dto.medicationId(),
-                dto.quantity());
-
-    }
-
-    // validar lote
-
-    // validar medicamento
-
-    // mapear para entrada/saida
-
-    //persist movement
-
 }
-

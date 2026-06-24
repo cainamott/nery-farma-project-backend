@@ -11,17 +11,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler   {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ErrorResponseDTO> handleBadCredentials(BadCredentialsException exception){
+    public ResponseEntity<ErrorResponseDTO> handleBadCredentials(BadCredentialsException exception) {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(ErrorResponseDTO.of(
-                        401,
-                        "Não autorizado",
-                        "Email ou senha inválidos"
-                ));
+                .body(ErrorResponseDTO.of(401, "Não autorizado", "Email ou senha inválidos"));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -34,11 +30,41 @@ public class GlobalExceptionHandler   {
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(ErrorResponseDTO.of(
-                        400,
-                        "Erro de validação",
-                        errosPorCampo
-                ));
+                .body(ErrorResponseDTO.of(400, "Erro de validação", errosPorCampo));
+    }
+
+    @ExceptionHandler({
+            MedicationNotFoundException.class,
+            OrderNotFoundException.class,
+            CategoryNotFoundException.class
+    })
+    public ResponseEntity<ErrorResponseDTO> handleNotFound(RuntimeException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponseDTO.of(404, "Não encontrado", ex.getMessage()));
+    }
+
+    @ExceptionHandler({
+            MedicationAlreadyExistsException.class,
+            CategoryAlreadyExistsException.class
+    })
+    public ResponseEntity<ErrorResponseDTO> handleConflict(RuntimeException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ErrorResponseDTO.of(409, "Conflito", ex.getMessage()));
+    }
+
+    @ExceptionHandler({
+            InvalidBatchException.class,
+            InsufficientStockException.class,
+            OrderRejectedException.class,
+            OrderStatusTransitionException.class,
+            IllegalArgumentException.class
+    })
+    public ResponseEntity<ErrorResponseDTO> handleBadRequest(RuntimeException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ErrorResponseDTO.of(400, "Requisição inválida", ex.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
@@ -48,7 +74,6 @@ public class GlobalExceptionHandler   {
                 .body(ErrorResponseDTO.of(
                         500,
                         "Erro interno",
-                        "Ocorreu um erro inesperado. Tente novamente mais tarde."
-                ));
+                        "Ocorreu um erro inesperado. Tente novamente mais tarde."));
     }
 }

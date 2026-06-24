@@ -2,8 +2,11 @@ package com.github.cainamott.nery_farma.impl.pattern.facade;
 
 import com.github.cainamott.nery_farma.impl.client.OrderProcessingClient;
 import com.github.cainamott.nery_farma.impl.dto.*;
-import com.github.cainamott.nery_farma.impl.dto.*;
 import com.github.cainamott.nery_farma.impl.enums.MedicationOrderStatus;
+import com.github.cainamott.nery_farma.impl.exceptions.MedicationNotFoundException;
+import com.github.cainamott.nery_farma.impl.exceptions.OrderNotFoundException;
+import com.github.cainamott.nery_farma.impl.exceptions.OrderRejectedException;
+import com.github.cainamott.nery_farma.impl.exceptions.OrderStatusTransitionException;
 import com.github.cainamott.nery_farma.impl.mappers.MedicationOrderMapper;
 import com.github.cainamott.nery_farma.impl.models.Medication;
 import com.github.cainamott.nery_farma.impl.models.MedicationOrder;
@@ -13,14 +16,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.Optional;
 import java.util.UUID;
 
-/**
- * Facade over the medication-order fulfillment subsystem (medication lookup, external
- * order processing, status transitions, persistence). Hides the coordination between
- * internal services and the external {@link OrderProcessingClient}.
- */
 @Component
 @AllArgsConstructor
 public class OrderFulfillmentFacade {
@@ -30,72 +27,57 @@ public class OrderFulfillmentFacade {
     private final MedicationOrderMapper orderMapper;
     private final OrderProcessingClient orderProcessingClient;
 
-    public MedicationOrderDTO submitNewOrder(MedicationOrderRequest requestDTO) {
+    public MedicationOrderDTO createNewOrder(MedicationOrderRequest requestDTO) {
+        Medication medication = medicationService.findById(requestDTO.medicationId())
+                .orElseThrow(MedicationNotFoundException::new);
 
-        Optional<Medication> medication = medicationService.findById(requestDTO.medicationId());
+        MedicationOrderResponse externalResponse = orderProcessingClient.sendOrder(requestDTO);
 
-        if (medication.isEmpty()) {
-            throw new RuntimeException("Medicamento não encontrado na base de dados!");
+        if ("REJECTED".equals(externalResponse.status())) {
+            throw new OrderRejectedException(externalResponse.message());
         }
 
-        MedicationOrderResponse medicationOrderResponse = orderProcessingClient.sendOrder(requestDTO);
+        MedicationOrder order = orderMapper.mapToEntity(requestDTO, medication, MedicationOrderStatus.PENDING);
+        orderRepository.save(order);
 
-        if (medicationOrderResponse.status().equals("REJECTED")) {
-
-            throw new RuntimeException("Pedido Rejeitado! " + medicationOrderResponse.message());
-        }
-
-        var medicationOrder = orderMapper.mapToEntity(requestDTO, medication.get(), MedicationOrderStatus.PENDING);
-        orderRepository.save(medicationOrder);
-        return orderMapper.mapToDto(medicationOrder);
+        return orderMapper.mapToDto(order);
     }
 
-    public UpdateOrderResponse updateOrderCargoStatus(UpdateOrderRequest updateRequest) {
+    public UpdateOrderResponse updateOrderStatus(UpdateOrderRequest updateRequest) {
+        MedicationOrder order = findOrderOrThrow(updateRequest.orderId());
 
-        MedicationOrder medicationOrder = validateOrder(updateRequest.orderId());
+        applyStatusTransition(order, MedicationOrderStatus.fromApi(updateRequest.orderStatus()));
+        updateEstimatedDeliveryDate(order);
+        order.setUpdatedAt(LocalDate.now());
 
-        updateOrderStatus(medicationOrder, MedicationOrderStatus.fromApi(updateRequest.orderStatus()));
-        updateEstimatedDeliveryDate(medicationOrder);
-        medicationOrder.setUpdatedAt(LocalDate.now());
-
-        return UpdateOrderResponse
-                .builder()
-                .orderId(updateRequest.orderId())
-                .newEstimatedDate(medicationOrder.getEstimatedDeliveryDate())
-                .status(medicationOrder.getStatus().toApi())
-                .message("Dados do pedido Atualizados")
-                .build();
+        return buildUpdateResponse(updateRequest.orderId(), order);
     }
 
     public MovementDTO receiveOrder(OrderReceivementRequest receivementRequest) {
-
-        // recebe request
-
-        // buscar pela order da request
-
-        // checar o estado da order (se estiver ok vai para o prox passo)
-
-        // update para concluido
-
-        // gera entrada de estoque com estado intermediario esperando conferencia
-
         return null;
     }
 
-    private void updateOrderStatus(MedicationOrder order, MedicationOrderStatus status) {
-
-        if (status.equals(MedicationOrderStatus.PENDING)) {
-            throw new RuntimeException("Pedido não pode ser atualizado para pendente!");
-        } else if (order.getStatus().equals(MedicationOrderStatus.DONE) && status.equals(MedicationOrderStatus.APPROVED)) {
-            throw new RuntimeException("Pedido não pode voltar ao status de aprovado pois já está completo");
-        } else if (order.getStatus().equals(MedicationOrderStatus.PENDING) && status.equals(MedicationOrderStatus.DONE)) {
-            throw new RuntimeException("Pedido não pode ser concluído pois ainda não foi aceito");
+    private void applyStatusTransition(MedicationOrder order, MedicationOrderStatus newStatus) {
+        if (MedicationOrderStatus.PENDING.equals(newStatus)) {
+            throw new OrderStatusTransitionException("Pedido não pode ser atualizado para pendente!");
         }
-        order.setStatus(status);
+
+        if (MedicationOrderStatus.DONE.equals(order.getStatus())
+                && MedicationOrderStatus.APPROVED.equals(newStatus)) {
+            throw new OrderStatusTransitionException(
+                    "Pedido não pode voltar ao status de aprovado pois já está completo");
+        }
+
+        if (MedicationOrderStatus.PENDING.equals(order.getStatus())
+                && MedicationOrderStatus.DONE.equals(newStatus)) {
+            throw new OrderStatusTransitionException(
+                    "Pedido não pode ser concluído pois ainda não foi aceito");
+        }
+
+        order.setStatus(newStatus);
     }
 
     private void updateEstimatedDeliveryDate(MedicationOrder order) {
-
         if (order.getRequestedQuantity() > 1000) {
             order.setEstimatedDeliveryDate(LocalDate.now().plusMonths(1));
         } else {
@@ -103,13 +85,17 @@ public class OrderFulfillmentFacade {
         }
     }
 
-    private MedicationOrder validateOrder(UUID orderId) {
+    private MedicationOrder findOrderOrThrow(UUID orderId) {
         return orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Pedido não encontrado: " + orderId));
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
     }
 
-    private Optional<MedicationOrder> findByOrderId(UUID id) {
-
-        return orderRepository.findById(id);
+    private UpdateOrderResponse buildUpdateResponse(UUID orderId, MedicationOrder order) {
+        return UpdateOrderResponse.builder()
+                .orderId(orderId)
+                .newEstimatedDate(order.getEstimatedDeliveryDate())
+                .status(order.getStatus().toApi())
+                .message("Dados do pedido Atualizados")
+                .build();
     }
 }

@@ -14,9 +14,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
- * Facade over the stock-management subsystem (medication validation, batch lifecycle,
- * movement persistence). Provides a simplified entry point for stock entry and dispatch
- * operations that would otherwise require coordinating multiple services and mappers.
+ * Facade do subsistema de estoque.
+ * Coordena validação de medicamento, ciclo de vida do lote e persistência de movimentos.
  */
 @Component
 @AllArgsConstructor
@@ -29,60 +28,56 @@ public class StockManagementFacade {
     private final MovementMapper movementMapper;
 
     public BatchDTO registerStockEntry(StockEntryDTO entryDTO) {
-
         medicationService.validateMedication(entryDTO.medicationId());
-        var dto = entryValidation(entryDTO);
-        if (dto != null) {
-            entryDTO = batchMapper.mapDtoToStockEntryDto(dto, entryDTO);
-        }
-        stockEntryMethod(entryDTO);
-        Batch updatedBatch = batchService.findByBatchNumber(entryDTO.batchNumber()).orElseThrow();
-        movementRepository.save(movementMapper.mapEntryToEntity(entryDTO, updatedBatch));
+
+        StockEntryDTO resolvedEntry = resolveEntryForExistingOrNewBatch(entryDTO);
+        applyStockEntry(resolvedEntry);
+
+        Batch updatedBatch = batchService.findByBatchNumber(resolvedEntry.batchNumber()).orElseThrow();
+        movementRepository.save(movementMapper.mapEntryToEntity(resolvedEntry, updatedBatch));
+
         return batchMapper.mapToDto(updatedBatch);
     }
 
     public BatchDTO registerStockDispatch(StockDispatchDTO dispatchDTO) {
-
         medicationService.validateMedication(dispatchDTO.medicationId());
-        var batchFound = batchService.findByBatchNumber(dispatchDTO.batchNumber()).get();
+
+        Batch batch = batchService.findByBatchNumber(dispatchDTO.batchNumber()).orElseThrow();
         batchService.validateBatch(
                 dispatchDTO.batchNumber(),
-                batchFound.getExpirationDate(),
-                batchFound.getCurrentQuantity());
+                batch.getExpirationDate(),
+                batch.getCurrentQuantity());
 
         return null;
-
-        // mapear para saida
-        // gerar movimento de saida e decrementar estoque
     }
 
-    private BatchDTO entryValidation(StockEntryDTO dto) {
 
-        if ((batchService.findByBatchNumber(dto.batchNumber()).isEmpty())) {
+     /* Se o lote ainda não existe, cria um novo e devolve o DTO de entrada atualizado.
+     * Se já existe, devolve o DTO original sem alterações. */
 
-            var newBatch = batchService.createNewBatch(BatchRequestDTO
-                    .builder()
-                    .batchNumber(dto.batchNumber())
-                    .medicationId(dto.medicationId())
-                    .expirationDate(dto.expirationDate())
-                    .fabricationDate(dto.fabricationDate())
-                    .currentQuantity(dto.quantity())
-                    .build());
+    private StockEntryDTO resolveEntryForExistingOrNewBatch(StockEntryDTO entryDTO) {
+        if (batchService.findByBatchNumber(entryDTO.batchNumber()).isPresent()) {
+            return entryDTO;
+        }
 
-            return batchMapper.mapToDto(newBatch);
-        } else return null;
+        Batch newBatch = batchService.createNewBatch(toBatchRequest(entryDTO));
+        BatchDTO newBatchDto = batchMapper.mapToDto(newBatch);
+
+        return batchMapper.mapDtoToStockEntryDto(newBatchDto, entryDTO);
     }
 
-    private void stockEntryMethod(StockEntryDTO dto) {
-
-        batchService.validateBatch(dto.batchNumber(), dto.expirationDate(), dto.quantity());
-        batchService.addQuantityToBatch(dto.medicationId(), dto.quantity());
+    private void applyStockEntry(StockEntryDTO entryDTO) {
+        batchService.validateBatch(entryDTO.batchNumber(), entryDTO.expirationDate(), entryDTO.quantity());
+        batchService.addQuantityToBatch(entryDTO.medicationId(), entryDTO.quantity());
     }
 
-    private void stockRemovalMethod(StockEntryDTO dto) {
-
-        batchService.removeQuantityFromBatch(
-                dto.medicationId(),
-                dto.quantity());
+    private BatchRequestDTO toBatchRequest(StockEntryDTO entryDTO) {
+        return BatchRequestDTO.builder()
+                .batchNumber(entryDTO.batchNumber())
+                .medicationId(entryDTO.medicationId())
+                .expirationDate(entryDTO.expirationDate())
+                .fabricationDate(entryDTO.fabricationDate())
+                .currentQuantity(entryDTO.quantity())
+                .build();
     }
 }

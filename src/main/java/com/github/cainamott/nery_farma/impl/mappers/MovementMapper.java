@@ -3,15 +3,19 @@ package com.github.cainamott.nery_farma.impl.mappers;
 import com.github.cainamott.nery_farma.impl.dto.MovementDTO;
 import com.github.cainamott.nery_farma.impl.dto.StockDispatchDTO;
 import com.github.cainamott.nery_farma.impl.dto.StockEntryDTO;
-import com.github.cainamott.nery_farma.impl.enums.MovementType;
 import com.github.cainamott.nery_farma.impl.models.Batch;
 import com.github.cainamott.nery_farma.impl.models.Movement;
+import com.github.cainamott.nery_farma.impl.pattern.factory.movement.DispatchMovementFactory;
+import com.github.cainamott.nery_farma.impl.pattern.factory.movement.EntryMovementFactory;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-
 @Component
+@AllArgsConstructor
 public class MovementMapper {
+
+    private final EntryMovementFactory entryMovementFactory;
+    private final DispatchMovementFactory dispatchMovementFactory;
 
     public Movement mapEntryToEntity(StockEntryDTO stockEntryDTO, Batch batch) {
 
@@ -19,13 +23,7 @@ public class MovementMapper {
             return null;
         }
 
-        return Movement.builder()
-                .batch(batch)
-                .type(MovementType.ENTRY)
-                .quantity(stockEntryDTO.quantity())
-                .createdAt(LocalDate.now())
-                .build();
-
+        return entryMovementFactory.createMovement(batch, stockEntryDTO.quantity());
     }
 
     public Movement mapDispatchToEntity(StockDispatchDTO stockDispatchDTO, Batch batch) {
@@ -34,13 +32,7 @@ public class MovementMapper {
             return null;
         }
 
-        return Movement.builder()
-                .batch(batch)
-                .type(MovementType.DISPATCH)
-                .quantity(stockDispatchDTO.quantity())
-                .createdAt(LocalDate.now())
-                .build();
-
+        return dispatchMovementFactory.createMovement(batch, stockDispatchDTO.quantity());
     }
 
     public MovementDTO mapToDto(Movement movement) {
